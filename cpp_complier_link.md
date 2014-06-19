@@ -27,9 +27,13 @@ char name[] = "chen shuo";.
 - 不能重载operator&，因为一旦重载，这个class就不能用前向声明了。
 
 ####第三节 链接
+
+#####重载
 - 为了实现函数重载，c++编译器采用名字改编的办法，为每个重载函数生成独一无二的名字，这样链接的时候就能找
 到正确的函数。
 - 返回类型不参与函数重载。
+
+#####inline
 - 重复代码消除：如果编译器如法inline展开的话，每个编译单元都会生成inline函数的目标代码，然后linker
 会从多分实现中任选一份保留，其余的则丢弃（vague linkage）。
 - 如何判断一个C++可执行文件是debug build 还是 release build？通常的做法是判断class template 的短函数
@@ -37,6 +41,8 @@ char name[] = "chen shuo";.
 - g++ -Wall *.cc 没有优化的bulid，不会inline展开。debug build.
 - g++ -Wall -o2 *.cc inline展开。release build.
 - 编译器自动生成的析构函数也是inline的
+
+#####模板，虚函数
 - 模板的定义一般要放到头文件中，否则会有编译错误，但是所谓的编译错误只是链接错误，有办法将模板的实现
 放到*.cc文件里，头文件里只放声明，前提是你知道模板会有那些具体化类型，并事先显式具体化出来。如：
  template<typename T>
