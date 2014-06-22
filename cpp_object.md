@@ -22,6 +22,8 @@
 
 - boost::function就像C#里的delegate，可以指向任何函数，包括成员函数，当用bind把某个成员函数绑定到某个
 对象上时，可以得到一个闭包。用法如下
+
+--------
 		class Foo{
 				public:
 				void methodA();
