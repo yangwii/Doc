@@ -34,7 +34,7 @@
 		class Bar{
 				public:
 				void methodB();
-		}
+		};
 
 		boost::function<void()> f1;//无参数，无返回值
 		Foo foo;
@@ -50,7 +50,58 @@
 
 		f1 = boost::bind(&Foo::methodString, &foo, "hello");
 		f1();
+		//注意，bind拷贝的时实参类型是const char *，不是string，这里形参中的string构造发生在
+		//调用f1(),而非bind的时候。
+		//若要安全可以用string("hello")
 
 		boost::function<void(int)> f2;//返回值为int类型
 		f2 = boost::bind(&Foo::methodInt, &foo, _1);
 		f2(53);
+--------
+- 如果没有boost::bind,那么boost::function，就没什么用了。
+- 继承是第二强的耦合，最强的耦合是友元。
+
+--------
+- 一个基于boost::function的Thread基本结构
+		class Thread{
+			public:
+			typedef boost::function<void()> ThreadCallBack;
+
+			Thread(ThreadCallBack cb): cb(_cb){}
+
+			void start(){/....}
+
+			private:
+			void run(){
+				cb_();//调用boost::bind绑定的函数
+			}
+
+			ThreadCallBack cb_;
+		};
+
+		class Foo{
+			public:
+			void runIntThread();
+			void runStrThread();
+		};
+
+		Foo foo;
+		Thread thread1(boost::bind(&Foo::runIntThread, &foo));
+		Thread thread2(boost::bind(&Foo::runStrThread, &foo));
+		thread1.start();
+		thread2.start();
+-------
+- 安全的读入数据：
+		int main()
+		{
+			const int max_name = 80;
+			char name[max_name];
+
+			char fmt[10];
+			sprintf(fmt, "%%%ds", max_name -1);//转义序列：%%-->%,转义后为%79s.
+			scanf(fmt, name);
+		}
+-------
+- gets(); char name[20]; gets(name); 不能制定缓冲区的长度。
+- fgets(); char name[20]; fgets(name, 19, stdin);
+	
