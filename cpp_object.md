@@ -20,3 +20,35 @@
 扩展，可以原地修改，而且容易保持二进制兼容性。
 - 使用no-virtual函数比virtual更健壮：因为virtual是bind-by-offset，而no-vitrual是bind-by-name。
 
+- boost::function就像C#里的delegate，可以指向任何函数，包括成员函数，当用bind把某个成员函数绑定到某个
+对象上时，可以得到一个闭包。用法如下
+		class Foo{
+				public:
+				void methodA();
+				void methodInt(int a);
+				void methodString(const string& str);
+		};
+
+		class Bar{
+				public:
+				void methodB();
+		}
+
+		boost::function<void()> f1;//无参数，无返回值
+		Foo foo;
+		f1 = boost::bind(&Foo::methodA, &foo);
+		f1();
+
+		Bar bar;
+		f1 = boost::bind(&Foo::methodB, &bar);
+		f1();
+
+		f1 = boost::bind(&Foo::methodInt, &foo, 42);//42参数
+		f1();
+
+		f1 = boost::bind(&Foo::methodString, &foo, "hello");
+		f1();
+
+		boost::function<void(int)> f2;//返回值为int类型
+		f2 = boost::bind(&Foo::methodInt, &foo, _1);
+		f2(53);
