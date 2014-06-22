@@ -63,6 +63,7 @@
 
 --------
 - 一个基于boost::function的Thread基本结构
+
 		class Thread{
 			public:
 			typedef boost::function<void()> ThreadCallBack;
@@ -92,6 +93,7 @@
 		thread2.start();
 -------
 - 安全的读入数据：
+
 		int main()
 		{
 			const int max_name = 80;
