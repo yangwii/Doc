@@ -16,9 +16,11 @@ int Find(int *a)
     a[1000] -= (i*(i-1))/2       //i的值为1001   
     return a[1000];   
 }
+```
 
 - Method2: 利用下标与单元中所存储的内容之间的特殊关系，进行遍历访问单元，一旦访问过的单元赋予一个标记
 ，利用标记作为发现重复数字的关键。代码如下：
+
 
 ```
 void findrepeat(int array[], int length)
