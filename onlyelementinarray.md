@@ -39,4 +39,5 @@ void findrepeat(int array[], int length)
 
 - Think：index是array的指示器，根据代码可以知道index是array相应的值-1，因为只有一个数重复，index只可能
 进入每个array[i]一次，如果进入两次则必是重复，index+1,即为重复的值。
-- [原文地址](http://veryti.com/question/400)原文地址
+
+- [http://veryti.com/question/400](http://veryti.com/question/400)---原文地址
