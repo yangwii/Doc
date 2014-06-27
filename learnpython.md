@@ -91,6 +91,7 @@ def cal(*nums):
 ###列表生成式[x*x for x in range(1,11)]
 - 写列表生成式时，把要生成的x*x放到前面，后跟for循环，就可以把list创建出来。
 - for后面还可以加上if判断 [x&x for x in range(1,11) if x%2 == 0]
+
 - 还可以使用两层循环，可以生成全排列 [m+n for m in 'ABC' for n in 'XYZ']
 - for循环其实可以同时使用两个甚至多个变量，比如dict的iteritems()可以同时迭代key和value。
 
@@ -105,7 +106,52 @@ def cal(*nums):
 的下一个元素做积累计算。
 
 ###匿名函数
-
 - map(lambda x:x*x, [1,2,3,4,5]),关键字lambda表示匿名函数，冒号前面的x表示函数参数。
 - 匿名函数有一个限制，就是只有一个表达式，不用写return。
 
+###装饰器
+- 由于函数也是一个对象，而且函数对象可以被赋值给变量，所以通过变量也可以调用函数。
+- 函数对象有一个__name__属性，可以得到函数的名字。
+- 在代码运行期间动态增加功能的方式，称为“装饰器”。本质上装饰器就是一个返回函数的高阶函数
+```
+def log(func):
+	def wrapper(*args, **kw):
+		print 'call %s():'%func.__name__
+		func(*argx, **kw)
+	return wrapper
+
+@log
+def now();
+	print '2014-6-27'
+```
+- 把@log放到now函数的定义处，相当于执行了语句：now=log(now)
+- 如果装饰器本身需要传入参数，那就需要编写一个返回装饰器的高阶函数：
+```
+def log(txt):
+	def decorator(func):
+		def wrapper(*args,**kw):
+			print '%s %s():'%(txt, func__name__)
+			return func(*args,**kw)
+		return wraper
+	return decorator
+
+@log('execute')
+def now():
+		print '2014-6-27'
+```
+- 和前面的两层嵌套相比，三层相当于now=log('execute').now(),首先执行log('execute'),返回
+的是decorator函数，再调用返回的函数，参数是now函数，返回值最终是wrapper函数。
+- 以上两种decorator的定义都没有问题，但因为函数也是对象，有__name__对象，但是经过
+decorator装饰后的函数，他们的__name__已经变成了'wrapper'.
+- 不需要写复杂的代码，Python内置的functools.wraps就是干这个事的，所以一个完整的decorator
+如下：
+```
+import functools
+
+def log(func):
+	@functools.wraps(func)
+	def wrapper(*args, **kw):
+		print 'call %s():' %func.__name__
+		return func(*args, **kw)
+	return wrapper
+```
