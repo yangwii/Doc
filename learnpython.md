@@ -155,3 +155,14 @@ def log(func):
 		return func(*args, **kw)
 	return wrapper
 ```
+
+###偏函数
+- functools.partial帮助我们创建一个偏函数 int2=functools.partial(int, base=2)
+- functools.partial的作用就是把一个函数的某些参数给固定住，返回一个新的函数，调用这个
+新的函数会更简单。
+
+###模块
+- sys模块，import sys后，就有了sys变量，利用sys变量，就可以访问sys模块的所有功能
+- sys模块有一个argv变量，用list存储了命令行的所有参数，至少有一个参数，同C/C++。
+- 当在命令行运行模块文件时，Python解释器把__name__置为__main__
+- 类似_xxx或者__xxx这样的函数或变量就是非公开的，不应该被直接引用。
