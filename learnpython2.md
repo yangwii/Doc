@@ -14,4 +14,4 @@ class Student(object):
 		self.name = name
 		self.score = score
 ```
-- 注意__init__方法的第一个参数必须是self，表示创建的实例本身。
+- 注意\_\_init\_\_方法的第一个参数必须是self，表示创建的实例本身。
