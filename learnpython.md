@@ -1,4 +1,4 @@
-## 学习Python笔记
+## Python学习笔记
 - 输出
 
 >>>print 'hello, world',print语句也可以跟上多个字符串，用逗号','隔开
