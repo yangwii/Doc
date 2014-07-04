@@ -94,6 +94,9 @@ def cal(*nums):
 
 - 还可以使用两层循环，可以生成全排列 [m+n for m in 'ABC' for n in 'XYZ']
 - for循环其实可以同时使用两个甚至多个变量，比如dict的iteritems()可以同时迭代key和value。
+```
+for k, v in dict.itertitems()
+```
 
 ###生成器()
 - 列表生成式和生成器的区别仅是最外层的[]和()
