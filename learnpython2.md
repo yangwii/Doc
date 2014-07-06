@@ -229,4 +229,68 @@ conn=mysql.connector.connect(user='root', password='i123', database='test',
 cursor.execute('insert into user (id, name) values(%s, %s)', ['1', 'name'])
 cursor=conn.cursor()
 ```
-- 注意：Mysql的占位符是%s，注意比较与sqlite3的区别。
+- 注意：Mysql的占位符是%s，注意比较与sqlite3占位符？的区别。
+
+###SQLAlchemy
+```
+from sqlalchemy import Column, String, create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
+class User(Base):
+	
+	__tablename__ = 'user'
+
+	id = Column(String(20), primary_key=True)
+	name = Column(String(20))
+
+engine = create_engine('mysql+mysqlconnector://root:i123@localhost:3306/test')
+DBSession = sessionmaker(bind=engine)
+
+def insert_db():
+	session = DBSession()
+	new_user = User(id = '7', name = 'yangwii')
+	session.add(new_user)
+	session.commit()
+	session.close()
+
+def select_db():
+	session = DBSession()
+	#fileter是where条件，最后调用one()返回一行，如果调用all()则返回所有行。
+	user = session.query(User).filter(User.id == '5').one();
+	print 'type:', type(user) 
+	print 'name:', user.name
+	session.close()
+
+if __name__ == '__main__':
+	print 'insert into DB'
+```
+- create_engin()用来初始化数据库连接，用一个字符转来表示连接信息：
+'数据库类型+数据库驱动名：//用户名：口令@机器地址：端口号/数据库名'
+
+###WSGI接口
+- Web的本质：1，浏览器发送一个HTTP请求。2，服务器受到请求，生成一个html文档。
+3，服务器把html文档作为http响应的Body发送给浏览器。4.浏览器受到HTTP响应，从http的body中出去html文档显示。
+- WSGI是一种规范，用来规范Python WEB应用与服务器之间的通信标准。
+```
+#wsgi处理函数
+def application(#接收两个参数
+				#字典对象，从客户端接收过来的请求
+				envrion,
+				#start_response是一个回调函数，有server提供，用来发送http status和header给server
+				):
+		response_body = 'hello world'
+		response_header = [('Content-Type', 'text/html')]
+		start_response('200 OK', response_header)
+
+		return [response_body]
+```
+- python标准库提供了wsgiref模块提供了一个参考实现：
+```
+from wsgiref import make_server
+
+httpd = make_server('', 8000, application)//地址，端口，上面的application（wsgi处理函数）
+httpd.serve_forever()
+```
